@@ -43,3 +43,24 @@ class YNABClient:
         except Exception as e:
             log.error('update_transactions error. %s', e)
             raise e
+
+
+    def create_transactions(self, budget_id, transactions):
+        data = json.dumps({ 'transactions': transactions })
+        path = f'/budgets/{budget_id}/transactions'
+        try:
+            res = requests.patch(self.base_url + path, data=data, headers=self.headers)
+            return res.json()
+        except Exception as e:
+            log.error('create_transactions error. %s', e)
+            raise e
+
+
+    def get_accounts(self, budget_id):
+        path = f'/budgets/{budget_id}/accounts'
+        try:
+            res = requests.get(self.base_url + path, headers=self.headers)
+            return res.json()
+        except Exception as e:
+            log.error('get_transactions error. %s', e)
+            raise e
