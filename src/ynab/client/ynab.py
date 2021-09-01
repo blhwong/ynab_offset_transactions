@@ -23,7 +23,7 @@ class YNABClient:
             raise e
 
 
-    def get_transactions(self, budget_id, since_date):
+    def get_transactions(self, budget_id, since_date=None):
         path = f'/budgets/{budget_id}/transactions'
         params = { 'since_date': since_date }
         try:
