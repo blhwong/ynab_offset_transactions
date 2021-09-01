@@ -1,3 +1,4 @@
+import os
 import json
 import datetime
 import logging
@@ -10,16 +11,15 @@ log.setLevel(logging.INFO)
 date_format = '%Y-%m-%d'
 time_format = '%Y-%m-%d %H:%M:%S%Z'
 
-brandon_budget_id = 'fdfb98f5-1b6d-4cde-ba34-2cb34b75cc1b'
-shared_account_id = 'd63ceea2-11b5-4492-937f-697bee97942a'
+access_token = os.environ.get('YNAB_ACCESS_TOKEN')
 now = datetime.datetime.now().strftime(time_format)
 
-client = YNABClient('975ecaf89cf6de03f89c701b48f0e834117068d814e266a3e400cd5195fd6087')
+client = YNABClient(access_token)
 
 
 def lambda_handler(event, context):
     log.info('event=%s context=%s', event, context)
-    return offset_transactions(brandon_budget_id, shared_account_id, 'RY')
+    return offset_transactions(event['budget_id'], event['account_id'], event['offset_payee_name'])
 
 
 def offset_transactions(budget_id, account_id, payee_name):
