@@ -49,7 +49,7 @@ class YNABClient:
         data = json.dumps({ 'transactions': transactions })
         path = f'/budgets/{budget_id}/transactions'
         try:
-            res = requests.patch(self.base_url + path, data=data, headers=self.headers)
+            res = requests.post(self.base_url + path, data=data, headers=self.headers)
             return res.json()
         except Exception as e:
             log.error('create_transactions error. %s', e)
