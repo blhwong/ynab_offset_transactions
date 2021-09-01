@@ -9,13 +9,13 @@ This deployed on AWS Lambda with a CloudWatch Event to run every 1 hour. It will
 
 My Account (Before)
 :----------------------------------------------:
-![My Account Before Snapshot](./docs/1.png)
+![My Account Before Snapshot](./docs/my_account_before.png)
 
 
 My Account (After)
 :----------------------------------------------:
-![My Account After Snapshot](./docs/2.png)
+![My Account After Snapshot](./docs/my_account_after.png)
 
 Shared Account (After)
 :----------------------------------------------:
-![Shared Account After Snapshot](./docs/3.png)
+![Shared Account After Snapshot](./docs/shared_account_after.png)
