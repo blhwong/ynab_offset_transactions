@@ -40,3 +40,4 @@ jobs:
           runtime: ${LAMBDA_RUNTIME}
           zip_file: lambda/deployment-package.zip
           handler: offset_transactions
+          debug: true
