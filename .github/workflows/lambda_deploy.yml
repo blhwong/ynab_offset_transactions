@@ -7,13 +7,6 @@ on:
     - '**.py'
     - '.github/workflows/lambda_deploy.yml'
 
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_REGION: us-east-2
-  LAMBDA_FUNCTION_NAME: OffsetTransactionsLambda
-  LAMBDA_RUNTIME: python3.8
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -33,10 +26,10 @@ jobs:
       - name: AWS Lambda Deploy
         uses: appleboy/lambda-action@master
         with:
-          aws_access_key_id: ${AWS_ACCESS_KEY_ID}
-          aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
-          aws_region: ${AWS_REGION}
-          function_name: ${LAMBDA_FUNCTION_NAME}
-          runtime: ${LAMBDA_RUNTIME}
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-east-2
+          function_name: OffsetTransactionsLambda
+          runtime: python3.8
           zip_file: lambda/deployment-package.zip
           handler: offset_transactions
