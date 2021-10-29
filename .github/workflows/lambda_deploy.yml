@@ -32,3 +32,4 @@ jobs:
           function_name: OffsetTransactionsLambda
           runtime: python3.8
           zip_file: lambda/deployment-package.zip
+          handler: offset_transactions.lambda_handler
