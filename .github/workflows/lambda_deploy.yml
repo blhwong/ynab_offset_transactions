@@ -33,10 +33,10 @@ jobs:
       - name: AWS Lambda Deploy
         uses: appleboy/lambda-action@v0.1.5
         with:
-          aws_access_key_id: ${{ AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ AWS_SECRET_ACCESS_KEY }}
+          aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+          aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY}
           aws_region: ${{ AWS_REGION }}
-          function_name: ${{ LAMBDA_FUNCTION_NAME }}
-          runtime: ${{ LAMBDA_RUNTIME }}
+          function_name: ${LAMBDA_FUNCTION_NAME}
+          runtime: ${LAMBDA_RUNTIME}
           zip_file: lambda/deployment-package.zip
           handler: offset_transactions
