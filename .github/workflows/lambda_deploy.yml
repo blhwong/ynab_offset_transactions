@@ -29,7 +29,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libpoppler-cpp-dev pkg-config python-dev
           pip install --target=python boto3
-      # from: mariamrf/py-lambda-action
       - name: install_zip_dependencies
         run: |
           echo "Installing and zipping dependencies..."
