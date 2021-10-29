@@ -1,0 +1,56 @@
+name: Deploy AWS Lambda
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - '**.py'
+    - '.github/workflows/lambda_deploy.yml'
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: us-east-2
+  LAMBDA_FUNCTION_NAME: OffsetTransactionsLambda
+  LAMBDA_LAYER_NAME: OffsetTransactionsLambdaDependencies
+  LAMBDA_RUNTIME: python3.8
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libpoppler-cpp-dev pkg-config python-dev
+          pip install --target=python boto3
+      # from: mariamrf/py-lambda-action
+      - name: install_zip_dependencies
+        run: |
+          echo "Installing and zipping dependencies..."
+          mkdir -p python
+          pip install --target=python -r requirements.txt
+          zip -r dependencies.zip ./python
+      - name: publish_dependencies_as_layer
+        run: |
+          echo "Publishing dependencies as a layer..."
+          result=$(aws lambda publish-layer-version --layer-name "${LAMBDA_LAYER_NAME}" --zip-file fileb://dependencies.zip)
+          echo $result
+          LAYER_VERSION_ARN=$(jq '.LayerVersionArn' <<< "$result")
+          echo ::set-env name=LAYER_VERSION_ARN::$LAYER_VERSION_ARN
+          rm -rf python
+          rm dependencies.zip
+      - name: publish_function_code
+        run: |
+          echo "Deploying the code itself..."
+          zip -r code.zip . -x \*.git\*
+          aws lambda update-function-code --function-name "${LAMBDA_FUNCTION_NAME}" --zip-file fileb://code.zip
+      - name: update_function_layers
+        run: |
+          echo "Using the layer in the function..."
+          aws lambda update-function-configuration --function-name "${LAMBDA_FUNCTION_NAME}" --layers "${LAYER_VERSION_ARN}"
